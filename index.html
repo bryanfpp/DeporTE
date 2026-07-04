@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Consultoría Deportiva Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-slate-950">
+    <!-- Pantalla Principal -->
+    <section id="mainScreen" class="relative min-h-screen bg-nature flex flex-col">
+        <!-- Navbar -->
+        <nav class="relative z-50 border-b border-white/10 backdrop-blur-sm">
+            <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-xl flex items-center justify-center text-white font-bold text-lg">⚽</div>
+                    <span class="text-white font-bold text-xl">Consultoría Deportiva</span>
+                </div>
+                <div class="flex gap-4">
+                    <button id="navLogin" class="px-6 py-2.5 text-white border border-white/30 rounded-lg hover:bg-white/10 transition">Iniciar sesión</button>
+                    <button id="navSignup" class="px-6 py-2.5 bg-white text-slate-900 rounded-lg font-semibold hover:bg-slate-100 transition">Registrarse</button>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Content -->
+        <div class="flex-1 flex items-center justify-end">
+            <div class="max-w-2xl px-6 py-20 text-white text-right">
+                <h1 class="text-7xl font-bold leading-tight mb-4">
+                    Bienvenido a Consultoría Deportiva.
+                </h1>
+                <div class="w-1 h-1 bg-cyan-400 mb-6 ml-auto"></div>
+                <p class="text-xl text-gray-300 leading-relaxed">
+                    Tu dashboard personal para seguir tu progreso en servicios de consultoría deportiva profesional.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pantalla de Login -->
+    <section id="loginScreen" class="hidden min-h-screen">
+        <div class="grid grid-cols-1 lg:grid-cols-2 h-screen">
+            <div class="bg-landscape"></div>
+            <div class="bg-slate-900 text-white flex flex-col justify-center px-8 lg:px-12 py-12 overflow-y-auto">
+                <button id="backFromLogin" class="mb-8 text-sm text-gray-400 hover:text-white transition flex items-center gap-2">← Volver</button>
+                <h1 class="text-4xl font-bold mb-3">Que bueno es volver a verte!</h1>
+                <p class="text-gray-400 mb-10">Accede a tu cuenta</p>
+                <form id="loginForm" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium mb-3">Correo electrónico</label>
+                        <input type="email" id="loginUser" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" placeholder="tu@correo.com" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-3">Contraseña</label>
+                        <div class="relative">
+                            <input type="password" id="loginPass" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" />
+                            <button type="button" class="absolute right-3 top-3 text-gray-400 hover:text-white">👁️</button>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <input type="checkbox" id="rememberMe" class="w-4 h-4 bg-slate-800 border border-slate-700 rounded accent-cyan-500" />
+                        <label for="rememberMe" class="ml-3 text-sm">Mantener sesión iniciada</label>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-white text-slate-900 font-semibold rounded-lg hover:bg-gray-100 transition">
+                        Iniciar sesión
+                    </button>
+                </form>
+                <p id="loginMessage" class="mt-6 text-sm text-center h-6"></p>
+                <div class="mt-6 text-center text-sm">
+                    <a href="#" class="text-cyan-400 hover:text-cyan-300">¿Olvidaste tu contraseña?</a>
+                </div>
+                <div class="mt-4 text-center text-sm text-gray-400">
+                    ¿No tienes una cuenta? <button type="button" onclick="document.getElementById('loginScreen').classList.add('hidden'); document.getElementById('signupScreen').classList.remove('hidden');" class="text-white font-semibold hover:text-cyan-400">Regístrate</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pantalla de Registro -->
+    <section id="signupScreen" class="hidden min-h-screen">
+        <div class="grid grid-cols-1 lg:grid-cols-2 h-screen">
+            <div class="bg-forest"></div>
+            <div class="bg-slate-900 text-white flex flex-col justify-center px-8 lg:px-12 py-12 overflow-y-auto">
+                <button id="backFromSignup" class="mb-8 text-sm text-gray-400 hover:text-white transition flex items-center gap-2">← Volver</button>
+                <h1 class="text-4xl font-bold mb-2">Crear cuenta</h1>
+                <p class="text-gray-400 mb-8">Ingresa tus datos personales para crear tu cuenta.</p>
+                <form id="registroForm" class="space-y-5">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Nombre</label>
+                            <input type="text" id="nombre" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" placeholder="ej. Juan" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Segundo nombre</label>
+                            <input type="text" id="segundo_nombre" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" placeholder="ej. Miguel" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Apellido Paterno</label>
+                            <input type="text" id="apellidos" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" placeholder="ej. Hernandez" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Apellido Materno</label>
+                            <input type="text" id="apellido_materno" class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" placeholder="ej. Torres" />
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Teléfono</label>
+                            <input type="tel" id="telefono" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium mb-2">Correo electrónico</label>
+                            <input type="email" id="correo" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" placeholder="ej. juantorres@gmail.com" />
+                        </div>
+                    </div>                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Contraseña</label>
+                        <input type="password" id="contrasena" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" placeholder="Min. 6 caracteres" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium mb-2">Confirmar contraseña</label>
+                        <input type="password" id="confirmarContrasena" required class="w-full px-4 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white outline-none focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 transition" placeholder="Repite tu contraseña" />
+                    </div>
+                </div>                    <button type="submit" class="w-full py-3 bg-white text-slate-900 font-semibold rounded-lg hover:bg-gray-100 transition mt-6">
+                        Crear cuenta
+                    </button>
+                </form>
+                <p id="signupMessage" class="mt-6 text-sm text-center h-6"></p>
+                <div class="mt-6 text-center text-sm text-gray-400">
+                    ¿Ya tienes una cuenta? <button type="button" onclick="document.getElementById('signupScreen').classList.add('hidden'); document.getElementById('loginScreen').classList.remove('hidden');" class="text-white font-semibold hover:text-cyan-400">Inicia sesión</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pantalla de Espera de Aprobación -->
+    <section id="waitingScreen" class="hidden min-h-screen bg-slate-900 flex items-center justify-center px-6">
+        <div class="max-w-md w-full text-center">
+            <div class="mb-6">
+                <div class="text-6xl mb-4">⏳</div>
+                <h1 class="text-4xl font-bold text-white mb-3">¡Registro Exitoso!</h1>
+                <p class="text-gray-400 text-lg">Tu solicitud está siendo revisada</p>
+            </div>
+            <div class="bg-slate-800 rounded-lg p-6 mb-6 border border-slate-700">
+                <p class="text-gray-300 mb-4">Gracias por registrarte. Un administrador revisará tu solicitud pronto.</p>
+                <p class="text-sm text-gray-500">Tu correo: <span id="waitingEmail" class="text-cyan-400 font-semibold"></span></p>
+            </div>
+            <button id="backToHome" class="w-full py-3 bg-white text-slate-900 font-semibold rounded-lg hover:bg-gray-100 transition">
+                Volver al inicio
+            </button>
+        </div>
+    </section>
+
+    <!-- Pantalla Principal del Usuario -->
+    <section id="userDashboard" class="hidden min-h-screen bg-slate-900">
+        <nav class="bg-slate-800 border-b border-slate-700">
+            <div class="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-xl flex items-center justify-center text-white font-bold">⚽</div>
+                    <div>
+                        <h1 class="text-white font-bold">Consultoría Deportiva</h1>
+                        <p class="text-xs text-gray-400">Mi Panel</p>
+                    </div>
+                </div>
+                <div class="flex gap-4">
+                    <button id="userLogout" class="px-6 py-2.5 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition">
+                        Cerrar sesión
+                    </button>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="max-w-7xl mx-auto px-6 py-12">
+            <div class="mb-8">
+                <h2 class="text-4xl font-bold text-white mb-2">Bienvenido, <span id="userName">Usuario</span></h2>
+                <p class="text-gray-400">Gestiona tus apuestas y configuración</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+                <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 cursor-pointer hover:border-cyan-500 transition" onclick="showUserSection('apuestas')">
+                    <div class="text-3xl mb-3">🎯</div>
+                    <h3 class="text-white font-semibold">Apuestas</h3>
+                    <p class="text-sm text-gray-400">Ver mis apuestas activas</p>
+                </div>
+                <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 cursor-pointer hover:border-cyan-500 transition" onclick="showUserSection('crear')">
+                    <div class="text-3xl mb-3">✨</div>
+                    <h3 class="text-white font-semibold">Crear Apuesta</h3>
+                    <p class="text-sm text-gray-400">Publica una nueva apuesta</p>
+                </div>
+                <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 cursor-pointer hover:border-cyan-500 transition" onclick="showUserSection('historial')">
+                    <div class="text-3xl mb-3">📊</div>
+                    <h3 class="text-white font-semibold">Historial</h3>
+                    <p class="text-sm text-gray-400">Ver tu historial</p>
+                </div>
+                <div class="bg-slate-800 rounded-lg border border-slate-700 p-6 cursor-pointer hover:border-cyan-500 transition" onclick="showUserSection('config')">
+                    <div class="text-3xl mb-3">⚙️</div>
+                    <h3 class="text-white font-semibold">Configuración</h3>
+                    <p class="text-sm text-gray-400">Ajustes de cuenta</p>
+                </div>
+            </div>
+
+            <div id="apuestasSection" class="hidden bg-slate-800 rounded-lg border border-slate-700 p-8">
+                <h3 class="text-2xl font-bold text-white mb-4">Apuestas Disponibles</h3>
+                <div id="apuestasUserLista" class="grid gap-4">
+                    <div class="text-center py-8 text-gray-400">
+                        Cargando apuestas...
+                    </div>
+                </div>
+            </div>
+
+            <div id="crearSection" class="hidden bg-slate-800 rounded-lg border border-slate-700 p-8">
+                <h3 class="text-2xl font-bold text-white mb-4">Crear Nueva Apuesta</h3>
+                <form id="userApuestaForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">Descripción</label>
+                        <input type="text" id="crearDesc" class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white outline-none focus:border-cyan-500" placeholder="Describe tu apuesta" required />
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">Monto</label>
+                            <input type="number" id="crearMonto" class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white outline-none focus:border-cyan-500" required />
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-white mb-2">Cuota</label>
+                            <input type="number" step="0.01" id="crearCuota" class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white outline-none focus:border-cyan-500" required />
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-white mb-2">📸 Foto (Imagen)</label>
+                        <input type="file" id="crearFoto" accept="image/*" class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-white" />
+                        <p id="fotoPreview" class="mt-2 text-sm text-gray-400"></p>
+                    </div>
+                    <button type="submit" class="w-full py-3 bg-cyan-500 text-slate-900 font-semibold rounded-lg hover:bg-cyan-600 transition">
+                        Publicar Apuesta
+                    </button>
+                </form>
+                <p id="crearApuestaMsg" class="mt-4 text-sm text-center text-gray-400"></p>
+            </div>
+
+            <div id="historialSection" class="hidden bg-slate-800 rounded-lg border border-slate-700 p-8">
+                <h3 class="text-2xl font-bold text-white mb-4">Tu Historial</h3>
+                <div class="text-center py-8 text-gray-400">
+                    No hay historial disponible
+                </div>
+            </div>
+
+            <div id="configSection" class="hidden bg-slate-800 rounded-lg border border-slate-700 p-8">
+                <h3 class="text-2xl font-bold text-white mb-4">Configuración de Cuenta</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-300 mb-2">Correo</label>
+                        <input type="email" id="userEmail" readonly class="w-full px-4 py-3 bg-slate-700 border border-slate-600 rounded-lg text-gray-400 cursor-not-allowed" />
+                    </div>
+                    <button class="px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                        Eliminar Cuenta
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>    <script>        const supabaseUrl = 'https://eihbyohxyhyjmihftvjh.supabase.co';
+        const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpaGJ5b2h4eWh5am1paGZ0dmpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwNDcwMzIsImV4cCI6MjA5ODYyMzAzMn0.uEXGAByt4bMiSmMs3-grWTNMdtDdnDw0mdVVH-AMbuk';
+        const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        const mainScreen = document.getElementById('mainScreen');
+        const loginScreen = document.getElementById('loginScreen');
+        const signupScreen = document.getElementById('signupScreen');
+        const waitingScreen = document.getElementById('waitingScreen');
+        const userDashboard = document.getElementById('userDashboard');
+
+        const ADMIN_USER = 'admin@gmail.com';
+        const ADMIN_PASS = 'admin123';
+
+        // Verificar si ya hay sesión iniciada
+        if (localStorage.getItem('adminLoggedIn') === 'true') {
+            window.location.href = 'admin.html';
+        } else if (localStorage.getItem('userEmail')) {
+            const userEmail = localStorage.getItem('userEmail');
+            const userStatus = localStorage.getItem('userStatus');
+            
+            if (userStatus === 'activo') {
+                showUserDashboard(userEmail);
+            } else if (userStatus === 'pendiente') {
+                showWaitingScreen(userEmail);
+            }
+        }
+
+        function showUserDashboard(email) {
+            mainScreen.classList.add('hidden');
+            loginScreen.classList.add('hidden');
+            signupScreen.classList.add('hidden');
+            waitingScreen.classList.add('hidden');
+            userDashboard.classList.remove('hidden');
+            document.getElementById('userEmail').value = email;
+            loadUserApuestas();
+        }
+
+        async function loadUserApuestas() {
+            const { data, error } = await supabaseClient.from('apuestas').select('*').order('created_at', { ascending: false });
+            const lista = document.getElementById('apuestasUserLista');
+            
+            if (error || !data || data.length === 0) {
+                lista.innerHTML = '<div class="text-center py-8 text-gray-400">No hay apuestas disponibles</div>';
+            } else {
+                lista.innerHTML = data.map(apuesta => `
+                    <div class="bg-slate-700 rounded-lg border border-slate-600 p-6 hover:border-cyan-500 transition">
+                        ${apuesta.imagen ? `<img src="${apuesta.imagen}" class="w-full h-40 rounded-lg object-cover mb-4" />` : ''}
+                        <h4 class="font-semibold text-white text-lg">${apuesta.descripcion}</h4>
+                        <div class="flex justify-between items-end mt-4">
+                            <div>
+                                <p class="text-sm text-gray-400">Monto</p>
+                                <p class="text-cyan-400 font-bold text-lg">$${apuesta.monto}</p>
+                                <p class="text-sm text-gray-400 mt-2">Cuota</p>
+                                <p class="text-green-400 font-bold">${apuesta.cuota}x</p>
+                            </div>
+                            <button onclick="apostarAhora(${apuesta.id})" class="px-6 py-2 bg-cyan-500 text-slate-900 font-semibold rounded-lg hover:bg-cyan-600 transition">
+                                Apostar
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        window.apostarAhora = (apuestaId) => {
+            alert('Funcionalidad de apuesta en desarrollo');
+        }
+
+        function showWaitingScreen(email) {
+            mainScreen.classList.add('hidden');
+            loginScreen.classList.add('hidden');
+            signupScreen.classList.add('hidden');
+            waitingScreen.classList.remove('hidden');
+            userDashboard.classList.add('hidden');
+            document.getElementById('waitingEmail').textContent = email;
+        }
+
+        function showUserSection(section) {
+            document.getElementById('apuestasSection').classList.add('hidden');
+            document.getElementById('crearSection').classList.add('hidden');
+            document.getElementById('historialSection').classList.add('hidden');
+            document.getElementById('configSection').classList.add('hidden');
+            
+            if (section === 'apuestas') document.getElementById('apuestasSection').classList.remove('hidden');
+            if (section === 'crear') {
+                document.getElementById('crearSection').classList.remove('hidden');
+                document.getElementById('fotoPreview').textContent = '';
+            }
+            if (section === 'historial') document.getElementById('historialSection').classList.remove('hidden');
+            if (section === 'config') document.getElementById('configSection').classList.remove('hidden');
+        }
+
+        // Preview de imagen
+        document.getElementById('crearFoto')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('fotoPreview');
+            
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    preview.innerHTML = `
+                        <div class="mt-3">
+                            <img src="${event.target.result}" class="w-32 h-32 rounded-lg object-cover" />
+                            <p class="text-xs text-gray-400 mt-2 break-all">Archivo: ${file.name}</p>
+                        </div>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Navegación
+        document.getElementById('navLogin').addEventListener('click', () => {
+            mainScreen.classList.add('hidden');
+            loginScreen.classList.remove('hidden');
+        });
+        document.getElementById('navSignup').addEventListener('click', () => {
+            mainScreen.classList.add('hidden');
+            signupScreen.classList.remove('hidden');
+        });
+
+        document.getElementById('backFromLogin').addEventListener('click', () => {
+            loginScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+            document.getElementById('loginMessage').textContent = '';
+        });
+
+        document.getElementById('backFromSignup').addEventListener('click', () => {
+            signupScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+            document.getElementById('registroForm').reset();
+            document.getElementById('signupMessage').textContent = '';
+        });
+
+        document.getElementById('backToHome').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userStatus');
+            waitingScreen.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+        document.getElementById('userLogout').addEventListener('click', () => {
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userStatus');
+            userDashboard.classList.add('hidden');
+            mainScreen.classList.remove('hidden');
+        });
+
+        // Login
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const user = document.getElementById('loginUser').value.trim();
+            const pass = document.getElementById('loginPass').value.trim();
+            const msg = document.getElementById('loginMessage');
+
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                localStorage.setItem('adminLoggedIn', 'true');
+                window.location.href = 'admin.html';
+            } else {
+                // Buscar usuario en base de datos
+                const { data: userData, error: userError } = await supabaseClient
+                    .from('usuarios')
+                    .select('correo, status')
+                    .eq('correo', user)
+                    .single();
+
+                if (userError || !userData) {
+                    msg.textContent = 'Usuario no encontrado.';
+                    msg.classList.add('text-red-500');
+                    setTimeout(() => { msg.classList.remove('text-red-500'); msg.textContent = ''; }, 3000);
+                } else if (userData.status === 'activo') {
+                    localStorage.setItem('userEmail', user);
+                    localStorage.setItem('userStatus', 'activo');
+                    showUserDashboard(user);
+                } else if (userData.status === 'pendiente') {
+                    localStorage.setItem('userEmail', user);
+                    localStorage.setItem('userStatus', 'pendiente');
+                    showWaitingScreen(user);
+                } else {
+                    msg.textContent = 'Tu cuenta ha sido rechazada.';
+                    msg.classList.add('text-red-500');
+                    setTimeout(() => { msg.classList.remove('text-red-500'); msg.textContent = ''; }, 3000);
+                }
+            }
+        });
+
+        // Registro
+        document.getElementById('registroForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msg = document.getElementById('signupMessage');
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Registrando...';
+
+            const nombre = document.getElementById('nombre').value.trim();
+            const segundoNombre = document.getElementById('segundo_nombre').value.trim();
+            const apellidoPaterno = document.getElementById('apellidos').value.trim();
+            const apellidoMaterno = document.getElementById('apellido_materno').value.trim();
+            const telefono = document.getElementById('telefono').value.trim();
+            const correo = document.getElementById('correo').value.trim();
+            const contrasena = document.getElementById('contrasena').value.trim();
+            const confirmarContrasena = document.getElementById('confirmarContrasena').value.trim();
+
+            if (contrasena.length < 6) {
+                msg.textContent = 'La contraseña debe tener al menos 6 caracteres.';
+                msg.classList.add('text-red-500');
+                btn.disabled = false;
+                btn.textContent = 'Crear cuenta';
+                return;
+            }
+
+            if (contrasena !== confirmarContrasena) {
+                msg.textContent = 'Las contraseñas no coinciden.';
+                msg.classList.add('text-red-500');
+                btn.disabled = false;
+                btn.textContent = 'Crear cuenta';
+                return;
+            }
+
+            const { error } = await supabaseClient.from('usuarios').insert([
+                {
+                    nombre,
+                    segundo_nombre: segundoNombre,
+                    apellido_paterno: apellidoPaterno,
+                    apellido_materno: apellidoMaterno,
+                    apellidos: `${apellidoPaterno} ${apellidoMaterno}`.trim(),
+                    telefono,
+                    correo,
+                    contrasena,
+                    status: 'pendiente'
+                }
+            ]);
+
+            if (error) {
+                msg.textContent = 'Error: ' + error.message;
+                msg.classList.add('text-red-500');
+            } else {
+                localStorage.setItem('userEmail', correo);
+                localStorage.setItem('userStatus', 'pendiente');
+                document.getElementById('registroForm').reset();
+                showWaitingScreen(correo);
+            }
+
+            btn.disabled = false;
+            btn.textContent = 'Crear cuenta';
+        });
+
+        // Crear apuesta desde usuario dashboard
+        document.getElementById('userApuestaForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const msg = document.getElementById('crearApuestaMsg');
+            const btn = e.target.querySelector('button[type="submit"]');
+            btn.disabled = true;
+            btn.textContent = 'Publicando...';
+
+            let imagenBase64 = null;
+            const fotoInput = document.getElementById('crearFoto');
+            
+            if (fotoInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = async function(event) {
+                    imagenBase64 = event.target.result;
+                    
+                    const { error } = await supabaseClient.from('apuestas').insert([{
+                        descripcion: document.getElementById('crearDesc').value,
+                        monto: parseFloat(document.getElementById('crearMonto').value),
+                        cuota: parseFloat(document.getElementById('crearCuota').value),
+                        imagen: imagenBase64
+                    }]);
+
+                    if (error) {
+                        msg.textContent = '❌ Error: ' + error.message;
+                        msg.classList.add('text-red-400');
+                    } else {
+                        msg.textContent = '✓ Apuesta publicada correctamente';
+                        msg.classList.remove('text-red-400');
+                        msg.classList.add('text-green-400');
+                        document.getElementById('userApuestaForm').reset();
+                        document.getElementById('fotoPreview').innerHTML = '';
+                        setTimeout(() => { msg.textContent = ''; msg.classList.remove('text-green-400'); }, 3000);
+                        loadUserApuestas();
+                    }
+                    btn.disabled = false;
+                    btn.textContent = 'Publicar Apuesta';
+                };
+                reader.readAsDataURL(fotoInput.files[0]);
+            } else {
+                const { error } = await supabaseClient.from('apuestas').insert([{
+                    descripcion: document.getElementById('crearDesc').value,
+                    monto: parseFloat(document.getElementById('crearMonto').value),
+                    cuota: parseFloat(document.getElementById('crearCuota').value)
+                }]);
+
+                if (error) {
+                    msg.textContent = '❌ Error: ' + error.message;
+                    msg.classList.add('text-red-400');
+                } else {
+                    msg.textContent = '✓ Apuesta publicada correctamente';
+                    msg.classList.remove('text-red-400');
+                    msg.classList.add('text-green-400');
+                    document.getElementById('userApuestaForm').reset();
+                    setTimeout(() => { msg.textContent = ''; msg.classList.remove('text-green-400'); }, 3000);
+                    loadUserApuestas();
+                }
+                btn.disabled = false;
+                btn.textContent = 'Publicar Apuesta';
+            }
+        });
+    </script>
+</body>
+</html>
