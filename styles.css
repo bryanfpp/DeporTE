@@ -12,13 +12,13 @@ body {
 
 /* Background Images */
 .bg-nature {
-    background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%), url('./img/imagen.png') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%), url('./imagen.png') center/cover no-repeat;
 }
 .bg-forest {
-    background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%), url('./img/imagen.png') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%), url('./imagen.png') center/cover no-repeat;
 }
 .bg-landscape {
-    background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 100%), url('./img/imagen.png') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 100%), url('./imagen.png') center/cover no-repeat;
 }
 
 /* Forms */
