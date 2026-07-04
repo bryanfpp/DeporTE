@@ -175,7 +175,7 @@
                 </div>
             </div>
         </nav>
-        
+
         <div class="max-w-7xl mx-auto px-6 py-12">
             <div class="mb-8">
                 <h2 class="text-4xl font-bold text-white mb-2">Bienvenido, <span id="userName">Usuario</span></h2>
@@ -258,7 +258,13 @@
                 </div>
             </div>
         </div>
-    </section>    <script>        const supabaseUrl = 'https://eihbyohxyhyjmihftvjh.supabase.co';
+    </section>    <!-- Modal para ver imagen en tamaÃ±o original -->
+    <div id="imagenModal" class="hidden fixed inset-0 z-[9999] bg-black/90 flex items-center justify-center p-4 cursor-pointer" onclick="cerrarImagenModal()">
+        <button onclick="cerrarImagenModal()" class="absolute top-4 right-4 text-white text-4xl font-bold hover:text-cyan-400 transition z-10">&times;</button>
+        <img id="imagenModalImg" src="" alt="Imagen ampliada" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl" onclick="event.stopPropagation()" />
+        <p class="absolute bottom-4 left-0 right-0 text-center text-white text-sm opacity-70">Haz clic fuera de la imagen para cerrar</p>
+    </div>
+    <script>        const supabaseUrl = 'https://eihbyohxyhyjmihftvjh.supabase.co';
         const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImVpaGJ5b2h4eWh5am1paGZ0dmpoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwNDcwMzIsImV4cCI6MjA5ODYyMzAzMn0.uEXGAByt4bMiSmMs3-grWTNMdtDdnDw0mdVVH-AMbuk';
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
@@ -277,7 +283,7 @@
         } else if (localStorage.getItem('userEmail')) {
             const userEmail = localStorage.getItem('userEmail');
             const userStatus = localStorage.getItem('userStatus');
-            
+
             if (userStatus === 'activo') {
                 showUserDashboard(userEmail);
             } else if (userStatus === 'pendiente') {
@@ -298,33 +304,72 @@
         async function loadUserApuestas() {
             const { data, error } = await supabaseClient.from('apuestas').select('*').order('created_at', { ascending: false });
             const lista = document.getElementById('apuestasUserLista');
-            
+
             if (error || !data || data.length === 0) {
                 lista.innerHTML = '<div class="text-center py-8 text-gray-400">No hay apuestas disponibles</div>';
             } else {
-                lista.innerHTML = data.map(apuesta => `
-                    <div class="bg-slate-700 rounded-lg border border-slate-600 p-6 hover:border-cyan-500 transition">
-                        ${apuesta.imagen ? `<img src="${apuesta.imagen}" class="w-full h-40 rounded-lg object-cover mb-4" />` : ''}
+                lista.innerHTML = data.map(apuesta => {
+                    const resultado = apuesta.resultado || 'pendiente';
+                    let borderClass = 'border-slate-600';
+                    let badgeHTML = '';
+                    let disabledBtn = '';
+                    if (resultado === 'ganada') {
+                        borderClass = 'border-green-500';
+                        badgeHTML = '<div class="mb-3 px-3 py-1.5 bg-green-500/20 border border-green-500 rounded-lg text-green-400 text-sm font-semibold text-center">✅ APUESTA GANADA</div>';
+                        disabledBtn = 'opacity-50 cursor-not-allowed';
+                    } else if (resultado === 'perdida') {
+                        borderClass = 'border-red-500';
+                        badgeHTML = '<div class="mb-3 px-3 py-1.5 bg-red-500/20 border border-red-500 rounded-lg text-red-400 text-sm font-semibold text-center">❌ APUESTA PERDIDA</div>';
+                        disabledBtn = 'opacity-50 cursor-not-allowed';
+                    }
+                    return `
+                    <div class="bg-slate-700 rounded-lg border-2 ${borderClass} p-6 hover:border-cyan-500 transition">
+                        ${apuesta.imagen ? `<img src="${apuesta.imagen}" class="w-full h-40 rounded-lg object-cover mb-4 cursor-pointer hover:opacity-80 transition" onclick="abrirImagenModal('${apuesta.imagen.replace(/'/g, "\\'")}')" title="Haz clic para ver en tamaÃ±o original" />` : ''}
                         <h4 class="font-semibold text-white text-lg">${apuesta.descripcion}</h4>
+                        ${badgeHTML}
                         <div class="flex justify-between items-end mt-4">
                             <div>
                                 <p class="text-sm text-gray-400">Monto</p>
-                                <p class="text-cyan-400 font-bold text-lg">$${apuesta.monto}</p>
+                                <p class="text-cyan-400 font-bold text-lg">${apuesta.monto}</p>
                                 <p class="text-sm text-gray-400 mt-2">Cuota</p>
                                 <p class="text-green-400 font-bold">${apuesta.cuota}x</p>
                             </div>
-                            <button onclick="apostarAhora(${apuesta.id})" class="px-6 py-2 bg-cyan-500 text-slate-900 font-semibold rounded-lg hover:bg-cyan-600 transition">
+                            <button onclick="apostarAhora(${apuesta.id}, '${apuesta.link ? apuesta.link.replace(/'/g, "\\'") : ''}')" ${disabledBtn ? 'disabled' : ''} class="px-6 py-2 bg-cyan-500 text-slate-900 font-semibold rounded-lg hover:bg-cyan-600 transition ${disabledBtn}">
                                 Apostar
                             </button>
                         </div>
                     </div>
-                `).join('');
+                `;
+                }).join('');
             }
         }
 
-        window.apostarAhora = (apuestaId) => {
-            alert('Funcionalidad de apuesta en desarrollo');
+        window.apostarAhora = (apuestaId, link) => {
+            if (link && link.trim() !== '') {
+                window.open(link, '_blank');
+            } else {
+                alert('Esta apuesta no tiene un enlace de redirección configurado');
+            }
         }
+        // Funciones para el modal de imagen
+        window.abrirImagenModal = (imagenSrc) => {
+            const modal = document.getElementById('imagenModal');
+            const modalImg = document.getElementById('imagenModalImg');
+            modalImg.src = imagenSrc;
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+        window.cerrarImagenModal = () => {
+            const modal = document.getElementById('imagenModal');
+            modal.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+        // Cerrar modal con tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                cerrarImagenModal();
+            }
+        });
 
         function showWaitingScreen(email) {
             mainScreen.classList.add('hidden');
@@ -340,7 +385,7 @@
             document.getElementById('crearSection').classList.add('hidden');
             document.getElementById('historialSection').classList.add('hidden');
             document.getElementById('configSection').classList.add('hidden');
-            
+
             if (section === 'apuestas') document.getElementById('apuestasSection').classList.remove('hidden');
             if (section === 'crear') {
                 document.getElementById('crearSection').classList.remove('hidden');
@@ -354,7 +399,7 @@
         document.getElementById('crearFoto')?.addEventListener('change', function(e) {
             const file = e.target.files[0];
             const preview = document.getElementById('fotoPreview');
-            
+
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(event) {
@@ -516,12 +561,12 @@
 
             let imagenBase64 = null;
             const fotoInput = document.getElementById('crearFoto');
-            
+
             if (fotoInput.files[0]) {
                 const reader = new FileReader();
                 reader.onload = async function(event) {
                     imagenBase64 = event.target.result;
-                    
+
                     const { error } = await supabaseClient.from('apuestas').insert([{
                         descripcion: document.getElementById('crearDesc').value,
                         monto: parseFloat(document.getElementById('crearMonto').value),

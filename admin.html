@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,18 +9,22 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
+
 <body class="bg-slate-50">
     <!-- Navbar -->
     <nav class="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center text-white font-bold text-lg">⚽</div>
+                <div
+                    class="w-12 h-12 bg-gradient-to-br from-blue-400 to-cyan-400 rounded-xl flex items-center justify-center text-white font-bold text-lg">
+                    ⚽</div>
                 <div>
                     <h1 class="font-bold text-slate-900">Consultoría Deportiva</h1>
                     <p class="text-xs text-slate-500">Dashboard Profesional</p>
                 </div>
             </div>
-            <button id="logoutBtn" class="px-6 py-2.5 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-all duration-300">
+            <button id="logoutBtn"
+                class="px-6 py-2.5 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition-all duration-300">
                 Cerrar sesión
             </button>
         </div>
@@ -54,9 +59,15 @@
 
         <!-- Tabs -->
         <div class="flex gap-4 mb-8 border-b border-slate-200">
-            <button id="tabSolicitudes" class="px-6 py-4 font-semibold text-slate-900 border-b-2 border-blue-600 cursor-pointer">📋 Solicitudes Pendientes</button>
-            <button id="tabUsuarios" class="px-6 py-4 font-semibold text-slate-600 border-b-2 border-transparent hover:border-slate-300 cursor-pointer">👥 Usuarios Aprobados</button>
-            <button id="tabApuestas" class="px-6 py-4 font-semibold text-slate-600 border-b-2 border-transparent hover:border-slate-300 cursor-pointer">🎯 Apuestas</button>
+            <button id="tabSolicitudes"
+                class="px-6 py-4 font-semibold text-slate-900 border-b-2 border-blue-600 cursor-pointer">📋 Solicitudes
+                Pendientes</button>
+            <button id="tabUsuarios"
+                class="px-6 py-4 font-semibold text-slate-600 border-b-2 border-transparent hover:border-slate-300 cursor-pointer">👥
+                Usuarios Aprobados</button>
+            <button id="tabApuestas"
+                class="px-6 py-4 font-semibold text-slate-600 border-b-2 border-transparent hover:border-slate-300 cursor-pointer">🎯
+                Apuestas</button>
         </div>
 
         <!-- Solicitudes Pendientes -->
@@ -72,7 +83,8 @@
         <div id="usuariosSection" class="hidden bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div class="px-8 py-6 border-b border-slate-200 flex items-center justify-between">
                 <h3 class="text-xl font-bold text-slate-900">Usuarios Activos</h3>
-                <button id="refreshUsers" class="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
+                <button id="refreshUsers"
+                    class="px-6 py-2.5 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">
                     Actualizar
                 </button>
             </div>
@@ -100,24 +112,37 @@
                 <form id="crearApuestaForm" class="space-y-4">
                     <div>
                         <label class="block text-sm font-medium text-slate-900 mb-2">Descripción</label>
-                        <input type="text" id="apuestaDesc" required class="w-full px-4 py-3 border border-slate-300 rounded-lg outline-none focus:border-blue-500" placeholder="Describe la apuesta..." />
+                        <input type="text" id="apuestaDesc" required
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg outline-none focus:border-blue-500"
+                            placeholder="Describe la apuesta..." />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-sm font-medium text-slate-900 mb-2">Monto</label>
-                            <input type="number" id="apuestaMonto" required class="w-full px-4 py-3 border border-slate-300 rounded-lg outline-none focus:border-blue-500" />
+                            <input type="number" id="apuestaMonto" required
+                                class="w-full px-4 py-3 border border-slate-300 rounded-lg outline-none focus:border-blue-500" />
                         </div>
                         <div>
                             <label class="block text-sm font-medium text-slate-900 mb-2">Cuota</label>
-                            <input type="number" id="apuestaCuota" step="0.01" required class="w-full px-4 py-3 border border-slate-300 rounded-lg outline-none focus:border-blue-500" />
+                            <input type="number" id="apuestaCuota" step="0.01" required
+                                class="w-full px-4 py-3 border border-slate-300 rounded-lg outline-none focus:border-blue-500" />
                         </div>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-900 mb-2">📸 Foto (Imagen)</label>
-                        <input type="file" id="apuestaFoto" accept="image/*" class="w-full px-4 py-3 border border-slate-300 rounded-lg cursor-pointer" />
+                        <input type="file" id="apuestaFoto" accept="image/*"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg cursor-pointer" />
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-900 mb-2">🔗 Link de redirección
+                            (opcional)</label>
+                        <input type="url" id="apuestaLink"
+                            class="w-full px-4 py-3 border border-slate-300 rounded-lg outline-none focus:border-blue-500"
+                            placeholder="https://ejemplo.com/cuota" />
                     </div>
                     <div id="fotoAdminPreview"></div>
-                    <button type="submit" class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
+                    <button type="submit"
+                        class="w-full py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition">
                         Publicar Apuesta
                     </button>
                 </form>
@@ -143,12 +168,12 @@
         const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
         const logoutBtn = document.getElementById('logoutBtn');
-        
+
         // Tabs
         const tabSolicitudes = document.getElementById('tabSolicitudes');
         const tabUsuarios = document.getElementById('tabUsuarios');
         const tabApuestas = document.getElementById('tabApuestas');
-        
+
         const solicitudesSection = document.getElementById('solicitudesSection');
         const usuariosSection = document.getElementById('usuariosSection');
         const apuestasSection = document.getElementById('apuestasSection');
@@ -167,15 +192,15 @@
             solicitudesSection.classList.add('hidden');
             usuariosSection.classList.add('hidden');
             apuestasSection.classList.add('hidden');
-            
+
             tabSolicitudes.classList.remove('border-blue-600', 'text-slate-900');
             tabUsuarios.classList.remove('border-blue-600', 'text-slate-900');
             tabApuestas.classList.remove('border-blue-600', 'text-slate-900');
-            
+
             tabSolicitudes.classList.add('border-transparent', 'text-slate-600');
             tabUsuarios.classList.add('border-transparent', 'text-slate-600');
             tabApuestas.classList.add('border-transparent', 'text-slate-600');
-            
+
             if (tab === 'solicitudes') {
                 solicitudesSection.classList.remove('hidden');
                 tabSolicitudes.classList.remove('border-transparent', 'text-slate-600');
@@ -306,21 +331,48 @@
                 apuestasLista.innerHTML = '';
             } else {
                 apuestasVacia.classList.add('hidden');
-                apuestasLista.innerHTML = data.map(apuesta => `
+                apuestasLista.innerHTML = data.map(apuesta => {
+                    const resultado = apuesta.resultado || 'pendiente';
+                    let badgeClass = 'bg-amber-100 text-amber-700 border-amber-300';
+                    let badgeText = '⏳ Pendiente';
+                    if (resultado === 'ganada') {
+                        badgeClass = 'bg-green-100 text-green-700 border-green-300';
+                        badgeText = '✅ Ganada';
+                    } else if (resultado === 'perdida') {
+                        badgeClass = 'bg-red-100 text-red-700 border-red-300';
+                        badgeText = '❌ Perdida';
+                    }
+                    return `
                     <div class="px-8 py-6 hover:bg-slate-50 transition">
                         <div class="flex gap-4 items-start justify-between">
                             <div class="flex-1">
-                                <h4 class="font-semibold text-slate-900">${apuesta.descripcion}</h4>
-                                <p class="text-sm text-slate-600 mt-1">Monto: $${apuesta.monto} | Cuota: ${apuesta.cuota}</p>
+                                <div class="flex items-center gap-2 mb-2">
+                                    <h4 class="font-semibold text-slate-900">${apuesta.descripcion}</h4>
+                                    <span class="px-2 py-0.5 text-xs font-semibold rounded-full border ${badgeClass}">${badgeText}</span>
+                                </div>
+                                <p class="text-sm text-slate-600 mt-1">Monto: ${apuesta.monto} | Cuota: ${apuesta.cuota}</p>
+                                ${apuesta.link ? `<p class="text-xs text-blue-500 mt-1 truncate">🔗 ${apuesta.link}</p>` : ''}
                                 ${apuesta.imagen ? `<p class="text-xs text-slate-500 mt-2">📸 Imagen incluida</p>` : ''}
                             </div>
                             <button onclick="eliminarApuesta('${apuesta.id}')" class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition whitespace-nowrap">
                                 Eliminar
                             </button>
                         </div>
+                        <div class="flex gap-2 mt-3">
+                            <button onclick="marcarResultado('${apuesta.id}', 'ganada')" class="px-3 py-1.5 text-xs font-semibold rounded-lg border-2 ${resultado === 'ganada' ? 'bg-green-600 text-white border-green-600' : 'bg-white text-green-600 border-green-600 hover:bg-green-50'} transition">
+                                ✓ Ganada
+                            </button>
+                            <button onclick="marcarResultado('${apuesta.id}', 'perdida')" class="px-3 py-1.5 text-xs font-semibold rounded-lg border-2 ${resultado === 'perdida' ? 'bg-red-600 text-white border-red-600' : 'bg-white text-red-600 border-red-600 hover:bg-red-50'} transition">
+                                ✕ Perdida
+                            </button>
+                            <button onclick="marcarResultado('${apuesta.id}', 'pendiente')" class="px-3 py-1.5 text-xs font-semibold rounded-lg border-2 ${resultado === 'pendiente' ? 'bg-amber-500 text-white border-amber-500' : 'bg-white text-amber-600 border-amber-500 hover:bg-amber-50'} transition">
+                                ⏳ Pendiente
+                            </button>
+                        </div>
                         ${apuesta.imagen ? `<img src="${apuesta.imagen}" class="mt-4 w-48 h-32 rounded-lg object-cover" />` : ''}
                     </div>
-                `).join('');
+                `;
+                }).join('');
             }
         }
 
@@ -365,6 +417,29 @@
             }
         };
 
+        // Marcar resultado de apuesta
+        window.marcarResultado = async (id, resultado) => {
+            console.log('Marcando resultado:', id, resultado);
+            const mensajes = {
+                ganada: '✅ Apuesta marcada como GANADA',
+                perdida: '❌ Apuesta marcada como PERDIDA',
+                pendiente: '⏳ Apuesta marcada como PENDIENTE'
+            };
+            const { data, error } = await supabaseClient
+                .from('apuestas')
+                .update({ resultado })
+                .eq('id', id)
+                .select();
+
+            if (error) {
+                console.error('Error al actualizar:', error);
+                alert('Error: ' + error.message);
+            } else {
+                console.log('Actualización exitosa:', data);
+                loadApuestas();
+            }
+        };
+
         // Crear Apuesta con imagen
         document.getElementById('crearApuestaForm').addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -378,14 +453,15 @@
             const fotoInput = document.getElementById('apuestaFoto');
             if (fotoInput.files[0]) {
                 const reader = new FileReader();
-                reader.onload = async function(event) {
+                reader.onload = async function (event) {
                     imagenBase64 = event.target.result;
-                    
+
                     const { error } = await supabaseClient.from('apuestas').insert([{
                         descripcion: document.getElementById('apuestaDesc').value,
                         monto: parseFloat(document.getElementById('apuestaMonto').value),
                         cuota: parseFloat(document.getElementById('apuestaCuota').value),
-                        imagen: imagenBase64
+                        imagen: imagenBase64,
+                        link: document.getElementById('apuestaLink').value.trim() || null
                     }]);
 
                     if (error) {
@@ -408,7 +484,8 @@
                 const { error } = await supabaseClient.from('apuestas').insert([{
                     descripcion: document.getElementById('apuestaDesc').value,
                     monto: parseFloat(document.getElementById('apuestaMonto').value),
-                    cuota: parseFloat(document.getElementById('apuestaCuota').value)
+                    cuota: parseFloat(document.getElementById('apuestaCuota').value),
+                    link: document.getElementById('apuestaLink').value.trim() || null
                 }]);
 
                 if (error) {
@@ -428,13 +505,13 @@
         });
 
         // Preview de imagen en admin
-        document.getElementById('apuestaFoto')?.addEventListener('change', function(e) {
+        document.getElementById('apuestaFoto')?.addEventListener('change', function (e) {
             const file = e.target.files[0];
             const preview = document.getElementById('fotoAdminPreview');
-            
+
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function(event) {
+                reader.onload = function (event) {
                     preview.innerHTML = `
                         <div class="mt-3 p-3 bg-blue-50 rounded-lg">
                             <img src="${event.target.result}" class="w-40 h-40 rounded-lg object-cover" />
@@ -453,4 +530,5 @@
         loadSolicitudes();
     </script>
 </body>
+
 </html>
