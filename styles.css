@@ -12,15 +12,13 @@ body {
 
 /* Background Images */
 .bg-nature {
-    background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%), url('https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=1200&q=80') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.3) 100%), url('./img/imagen.png') center/cover no-repeat;
 }
-
 .bg-forest {
-    background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%), url('https://images.unsplash.com/photo-1511632765486-a01980e01a18?w=1200&q=80') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.4) 100%), url('./img/imagen.png') center/cover no-repeat;
 }
-
 .bg-landscape {
-    background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 100%), url('https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80') center/cover no-repeat;
+    background: linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.35) 100%), url('./img/imagen.png') center/cover no-repeat;
 }
 
 /* Forms */
